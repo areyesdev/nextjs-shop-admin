@@ -5,7 +5,7 @@ const addProduct = async (body) => {
   const config = {
     headers: {
       accept: '*/*',
-      'Content-type': 'application/json',
+      'Content-Type': 'application/json',
     },
   };
   const response = await axios.post(
