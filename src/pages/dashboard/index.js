@@ -2,8 +2,8 @@ import useFetch from '@hooks/useFetch';
 import endPoints from '@services/api';
 import { Chart } from '@common/Chart';
 
-const PRODUCT_LIMIT = 60;
-const PRODUCT_OFFSET = 60;
+const PRODUCT_LIMIT = 10;
+const PRODUCT_OFFSET = 10;
 export default function Dashboard() {
   const products = useFetch(
     endPoints.products.getProducts(PRODUCT_LIMIT, PRODUCT_OFFSET)

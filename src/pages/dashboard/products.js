@@ -1,14 +1,15 @@
 import { useState, useEffect } from 'react';
-import { PlusIcon, XCircleIcon } from '@heroicons/react/solid';
+import { CheckIcon, XCircleIcon } from '@heroicons/react/solid';
+import Link from 'next/link';
 import Modal from '@common/Modal';
 import FormProduct from '@components/FormProduct';
 import axios from 'axios';
 import endPoints from '@services/api';
-import Alert from '@common/Alert';
 import useAlert from '@hooks/useAlert';
+import Alert from '@common/Alert';
 import { deleteProduct } from '@services/api/products';
 
-export default function products() {
+export default function Products() {
   const [open, setOpen] = useState(false);
   const [products, setProducts] = useState([]);
   const { alert, setAlert, toggleAlert } = useAlert();
@@ -18,15 +19,19 @@ export default function products() {
       const response = await axios.get(endPoints.products.allProducts);
       setProducts(response.data);
     }
-    getProducts();
+    try {
+      getProducts();
+    } catch (error) {
+      console.log(error);
+    }
   }, [alert]);
 
-  const handleDelete = async (id) => {
+  const handleDelete = (id) => {
     deleteProduct(id).then(() => {
       setAlert({
         active: true,
-        message: 'Product deleted successfully',
-        type: 'success',
+        message: 'Delete product successfully',
+        type: 'error',
         autoClose: true,
       });
     });
@@ -48,7 +53,7 @@ export default function products() {
               className='inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
               onClick={() => setOpen(true)}
             >
-              <PlusIcon className='-ml-1 mr-2 h-5 w-5' aria-hidden='true' />
+              <CheckIcon className='-ml-1 mr-2 h-5 w-5' aria-hidden='true' />
               Add Product
             </button>
           </span>
@@ -127,18 +132,18 @@ export default function products() {
                         {product.id}
                       </td>
                       <td className='px-6 py-4 whitespace-nowrap text-right text-sm font-medium'>
-                        <a
-                          href='/edit'
+                        <Link
+                          href={`/dashboard/edit/${product.id}`}
                           className='text-indigo-600 hover:text-indigo-900'
                         >
                           Edit
-                        </a>
+                        </Link>
                       </td>
                       <td className='px-6 py-4 whitespace-nowrap text-right text-sm font-medium'>
                         <XCircleIcon
-                          className='text-red-600 hover:text-red-900'
+                          className='flex-shrink-0 h-6 w-6 text-gray-400 cursor-pointer'
                           aria-hidden='true'
-                          onClick={handleDelete(product.id)}
+                          onClick={() => handleDelete(product.id)}
                         />
                       </td>
                     </tr>
